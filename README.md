@@ -14,3 +14,8 @@
 ## Author
 
 This gem was written by Ian Katz (ianfixes@gmail.com) in 2023.  It's released under the Apache 2.0 license.
+
+
+## See Also
+
+* [Contributing](CONTRIBUTING.md)
