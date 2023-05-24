@@ -74,8 +74,8 @@ module TAPParser
 
           # find directives
           unless directive_str.nil?
-            match = /#\s*(SKIP|TODO)\S*\s+([^\n]*)/.match(directive_str)
-            test[:directives] = { $1.to_sym => $2 } if match
+            match = /#\s+(SKIP|TODO)(\S*\s+([^\n]*))?/.match(directive_str)
+            test[:directives] = { $1.to_sym => $3 } if match
           end
 
           # find diagnostics
