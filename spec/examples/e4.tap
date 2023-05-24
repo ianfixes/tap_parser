@@ -1,0 +1,35 @@
+TAP version 14
+
+# description: hello
+# todo: true
+ok 1 - hello # TODO
+
+# description: hello # todo
+# todo: false
+ok 2 - hello \# TODO
+
+# description: hello
+# todo: true
+# todo reason: hash # character
+ok 3 - hello # TODO hash \# character
+# (assuming "character" isn't a known custom directive)
+ok 4 - hello # TODO hash # character
+
+# description: hello \
+# todo: true
+# todo reason: hash # character
+ok 5 - hello \\# TODO hash \# character
+# (assuming "character" isn't a known custom directive)
+ok 6 - hello \\# TODO hash # character
+
+# description: hello # description # TODO
+# todo: false
+# (assuming "description" isn't a known custom directive)
+ok 7 - hello # description # TODO
+
+# multiple escaped \ can appear in a row
+# description: hello \\\# TODO
+# todo: false
+ok 8 - hello \\\\\\\# TODO
+
+1..8

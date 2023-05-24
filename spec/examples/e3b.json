@@ -1,0 +1,22 @@
+{
+  "tap_version": 14,
+  "description": "e3b.tap",
+  "tests": [
+    {
+      "number": 2,
+      "description": "",
+      "result": "pass"
+    },
+    {
+      "number": 4,
+      "description": "",
+      "result": "pass"
+    },
+    {
+      "number": 1,
+      "description": "",
+      "result": "pass"
+    }
+  ],
+  "expected_tests": 3
+}

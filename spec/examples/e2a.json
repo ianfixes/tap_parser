@@ -1,0 +1,32 @@
+{
+  "tap_version": null,
+  "description": "e2a.tap",
+  "tests": [
+    {
+      "number": 1,
+      "description": "",
+      "result": "fail"
+    },
+    {
+      "number": 2,
+      "description": "",
+      "result": "pass"
+    },
+    {
+      "number": 3,
+      "description": "",
+      "result": "fail"
+    },
+    {
+      "number": 4,
+      "description": "",
+      "result": "pass"
+    },
+    {
+      "number": 5,
+      "description": "",
+      "result": "pass"
+    }
+  ],
+  "expected_tests": 5
+}

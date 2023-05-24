@@ -1,0 +1,41 @@
+{
+  "description": "e1.tap",
+  "expected_tests": 4,
+  "tap_version": 14,
+  "tests": [
+    {
+      "description": "Input file opened",
+      "number": 1,
+      "result": "pass"
+    },
+    {
+      "description": "First line of the input valid",
+      "number": 2,
+      "result": "fail",
+      "diagnostics": {
+        "data": {
+          "expect": "Fnible",
+          "got": "Flirble"},
+          "message": "First line invalid",
+          "severity": "fail"
+        }
+    },
+    {
+      "description": "Read the rest of the file",
+      "number": 3,
+      "result": "pass"
+    },
+    {
+      "description": "Summarized correctly",
+      "number": 4,
+      "result": "fail",
+      "diagnostics":{
+        "message": "Can't make summary yet",
+        "severity": "todo"
+      },
+      "directives": {
+        "TODO": "Not written yet"
+      }
+    }
+  ]
+}

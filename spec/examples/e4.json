@@ -1,0 +1,47 @@
+{
+  "tap_version": 14,
+  "description": "e4.tap",
+  "tests": [
+    {
+      "number": 1,
+      "description": "hello",
+      "result": "pass"
+    },
+    {
+      "number": 2,
+      "description": "hello \\",
+      "result": "pass"
+    },
+    {
+      "number": 3,
+      "description": "hello",
+      "result": "pass"
+    },
+    {
+      "number": 4,
+      "description": "hello",
+      "result": "pass"
+    },
+    {
+      "number": 5,
+      "description": "hello \\\\",
+      "result": "pass"
+    },
+    {
+      "number": 6,
+      "description": "hello \\\\",
+      "result": "pass"
+    },
+    {
+      "number": 7,
+      "description": "hello",
+      "result": "pass"
+    },
+    {
+      "number": 8,
+      "description": "hello \\\\\\\\\\\\\\",
+      "result": "pass"
+    }
+  ],
+  "expected_tests": 8
+}
