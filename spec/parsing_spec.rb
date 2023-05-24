@@ -2,6 +2,11 @@ require "spec_helper"
 require "pathname"
 require "json"
 
+# ruby tries to symbolicate all the keys... stop it.
+def str_key(hash)
+  JSON.parse(hash.to_json)
+end
+
 RSpec.describe "TapParser" do
   context "parsing" do
 
@@ -23,23 +28,35 @@ RSpec.describe "TapParser" do
         end
 
         context "parsing" do
-          expected = JSON.parse(File.read(corresponding_path))
-          actual_sym = TAPParser.parse(child.basename.to_s, File.read(child).each_line)
-          actual = JSON.parse(actual_sym.to_json)
+          expected = JSON.parse(File.read(corresponding_path)) rescue str_key({tests: []})
 
-          it "Has the expected number of tests" do
-            expect(expected["tests"].length).to eq(actual["tests"].length)
+          before do
+            @actual = str_key(TAPParser.parse(child.basename.to_s, File.read(child).each_line))
           end
 
-          [expected["tests"].length, actual["tests"].length].max.times do |i|
-            it "Has the expected tests[#{i}]" do
-              expect(actual["tests"][i]).to eq(expected["tests"][i])
+          if expected["tests"].nil?
+            it "Expects tests" do
+              expect(expected["tests"].not_to be_nil)
+            end
+          else
+            it "Has the expected number of tests" do
+              expect(expected["tests"].length).to eq(@actual["tests"].length)
+            end
+
+            expected["tests"].length.times do |i|
+              it "Has the expected tests[#{i}]" do
+                expect(@actual["tests"][i]).to eq(expected["tests"][i])
+              end
             end
           end
 
           it "parses as expected" do
-            expect(actual).to eq(expected)
+            expect(@actual).to eq(expected)
+          rescue RSpec::Expectations::ExpectationNotMetError => e
+            puts JSON.pretty_generate(@actual, indent: "  ")
+            raise
           end
+
         end
       end
     end

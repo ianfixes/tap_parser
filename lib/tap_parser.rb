@@ -83,7 +83,7 @@ module TAPParser
           if /^#{yaml_indent}---(\s*)$/.match(next_line)
             raw_yaml = enum_take_while { |l| !/^#{yaml_indent}\.\.\.\s*$/.match(l) }
             yaml = raw_yaml.map { |l| l[yaml_indent.length..-1] }.to_a.join
-            puts yaml.to_s
+            # puts yaml.to_s
             test[:diagnostics] = YAML.safe_load(yaml)
             enum_next # strip off "..."
           end
