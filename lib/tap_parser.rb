@@ -83,30 +83,12 @@ module TAPParser
           if /^#{yaml_indent}---(\s*)$/.match(next_line)
             raw_yaml = enum_take_while { |l| !/^#{yaml_indent}\.\.\.\s*$/.match(l) }
             yaml = raw_yaml.map { |l| l[yaml_indent.length..-1] }.to_a.join
-            # puts yaml.to_s
             test[:diagnostics] = YAML.safe_load(yaml)
             enum_next # strip off "..."
           end
 
           tests << test
 
-        # when /^(\s*)---\n/
-        #   test = parse_tests(lines, current_indentation, limit - 1)
-        #   test[:diagnostics] ||= {}
-
-        #   yaml_block_lines = []
-        #   begin
-        #     line = lines.peek
-        #     break if line == "#{test[:indentation]}...\n"
-        #     yaml_block_lines << lines.next
-        #   rescue StopIteration
-        #     break
-        #   end
-
-        #   yaml_block = YAML.safe_load(yaml_block_lines.join(''))
-        #   test[:diagnostics].merge!(yaml_block)
-
-        #   tests << test
         when /^Bail out!(.*)\n$/
           # Bail out directive
           reason = ($1.nil? || $1.strip.empty?) ? nil : $1.strip
