@@ -1,0 +1,69 @@
+{
+  "description": "e11.tap",
+  "expected_tests": 9,
+  "tap_version": 14,
+  "tests": [
+    {
+      "description": "created Board",
+      "number": 1,
+      "result": "pass"
+    },
+    {
+      "description": "",
+      "number": 2,
+      "result": "pass"
+    },
+    {
+      "description": "",
+      "number": 3,
+      "result": "pass"
+    },
+    {
+      "description": "",
+      "number": 4,
+      "result": "pass"
+    },
+    {
+      "description": "",
+      "number": 5,
+      "result": "pass"
+    },
+    {
+      "description": "",
+      "number": 6,
+      "result": "pass"
+    },
+    {
+      "description": "",
+      "number": 7,
+      "result": "pass"
+    },
+    {
+      "description": "",
+      "number": 8,
+      "result": "pass",
+      "diagnostics": {
+        "dump": {
+          "board": [
+            "      16G         05C        ",
+            "      G N C       C C G      ",
+            "        G           C  +     ",
+            "10C   01G         03C        ",
+            "R N G G A G       C C C      ",
+            "  R     G           C  +     ",
+            "      01G   17C   00C        ",
+            "      G A G G N R R N R      ",
+            "        G     R     G        "
+          ]
+        },
+        "message": "Board layout",
+        "severity": "comment"
+      }
+    },
+    {
+      "description": "board has 7 tiles + starter tile",
+      "number": 9,
+      "result": "pass"
+    }
+  ]
+}

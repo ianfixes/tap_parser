@@ -1,0 +1,15 @@
+{
+  "description": "e7.tap",
+  "expected_tests": 573,
+  "tap_version": 14,
+  "directives": {
+    "bail out": "Couldn't connect to database."
+  },
+  "tests": [
+    {
+      "number": 1,
+      "description": "database handle",
+      "result": "fail"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "description": "e10.tap",
+  "expected_tests": 4,
+  "tap_version": 14,
+  "tests": [
+    {
+      "description": "Creating test program",
+      "number": 1,
+      "result": "pass"
+    },
+    {
+      "description": "Test program runs, no error",
+      "number": 2,
+      "result": "pass"
+    },
+    {
+      "description": "infinite loop",
+      "number": 3,
+      "result": "fail",
+      "directives": {
+        "TODO": "halting problem unsolved"
+      }
+    },
+    {
+      "description": "infinite loop 2",
+      "number": 4,
+      "result": "fail",
+      "directives": {
+        "TODO": "halting problem unsolved"
+      }
+    }
+  ]
+}

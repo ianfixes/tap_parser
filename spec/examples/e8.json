@@ -1,0 +1,44 @@
+{
+  "description": "e8.tap",
+  "expected_tests": 5,
+  "tap_version": 14,
+  "tests": [
+    {
+      "description": "approved operating system",
+      "number": 1,
+      "result": "pass"
+    },
+    {
+      "description": "",
+      "number": 2,
+      "result": "pass",
+      "directives": {
+        "SKIP": "no /sys directory"
+      }
+    },
+    {
+      "description": "",
+      "number": 3,
+      "result": "pass",
+      "directives": {
+        "SKIP": "no /sys directory"
+      }
+    },
+    {
+      "description": "",
+      "number": 4,
+      "result": "pass",
+      "directives": {
+        "SKIP": "no /sys directory"
+      }
+    },
+    {
+      "description": "",
+      "number": 5,
+      "result": "pass",
+      "directives": {
+        "SKIP": "no /sys directory"
+      }
+    }
+  ]
+}
