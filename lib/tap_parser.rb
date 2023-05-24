@@ -122,12 +122,12 @@ module TAPParser
       end
 
       ret = {
+        tap_version: protocol_version,
         description: parent_description,
         tests: tests,
         expected_tests: expected_tests
       }
       ret[:directives] = directives unless directives.nil?
-      ret[:tap_version] = protocol_version unless protocol_version.nil?
       ret
     end
     parse_tests(source_description, 0, 2)
