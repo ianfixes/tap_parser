@@ -5,6 +5,24 @@ require "tap_parser/version"
 # @author Ian Katz <ianfixes@gmail.com>
 module TAPParser
 
+  IS_TAP_VERSION = /^TAP version (\d+)/
+  IS_COMMENT =     /^\s*#/
+  IS_TAP_PLAN =    /^1\.\.(\d+)/
+  IS_TEST =        /^(\s*)((not )?ok)\s*(\d+)?\s*(-\s*)?(.*?)\s*(#.*?)?\n$/
+  IS_BAIL_OUT =    /^Bail out!(.*)\n$/
+  IS_DIRECTIVE =   /#\s+(SKIP|TODO)(\S*\s+([^\n]*))?/
+  IS_PRAGMA =      /^pragma ([+-])([a-zA-Z0-9_-]+)\n$/
+
+  def self.is_yaml_begin(expected_indentation)
+    yaml_indent = expected_indentation + (" " * 2)
+    /^#{yaml_indent}---(\s*)$/
+  end
+
+  def self.is_yaml_end(expected_indentation)
+    yaml_indent = expected_indentation + (" " * 2)
+    /^#{yaml_indent}\.\.\.\s*$/
+  end
+
   def self.parse(source_description, lines)
     pragmas = {}
 
@@ -50,14 +68,14 @@ module TAPParser
         next_line = enum_peek
 
         case line
-        when /^TAP version (\d+)/
+        when IS_TAP_VERSION
           protocol_version = $1.to_i
-        # when /^\s*#/
-        #   # comment, ignore
-        when /^1\.\.(\d+)/
+        when IS_COMMENT
+          # comment, ignore
+        when IS_TAP_PLAN
           # TAP plan line
           expected_tests = $1.to_i
-        when /^(\s*)((not )?ok)\s*(\d+)?\s*(-\s*)?(.*?)\s*(#.*?)?\n$/
+        when IS_TEST
           encountered_tests += 1
           actual_indentation = $1 || ''
           result_str = $2
@@ -74,14 +92,14 @@ module TAPParser
 
           # find directives
           unless directive_str.nil?
-            match = /#\s+(SKIP|TODO)(\S*\s+([^\n]*))?/.match(directive_str)
+            match = IS_DIRECTIVE.match(directive_str)
             test[:directives] = { $1.to_sym => $3 } if match
           end
 
           # find diagnostics
           yaml_indent = expected_indentation + (" " * 2)
-          if /^#{yaml_indent}---(\s*)$/.match(next_line)
-            raw_yaml = enum_take_while { |l| !/^#{yaml_indent}\.\.\.\s*$/.match(l) }
+          if is_yaml_begin(expected_indentation).match(next_line)
+            raw_yaml = enum_take_while { |l| !is_yaml_end(expected_indentation).match(l) }
             yaml = raw_yaml.map { |l| l[yaml_indent.length..-1] }.to_a.join
             test[:diagnostics] = YAML.safe_load(yaml)
             enum_next # strip off "..."
@@ -89,13 +107,14 @@ module TAPParser
 
           tests << test
 
-        when /^Bail out!(.*)\n$/
+        when IS_BAIL_OUT
           # Bail out directive
           reason = ($1.nil? || $1.strip.empty?) ? nil : $1.strip
           directives ||= {}
           directives["bail out"] = reason
           break
-        when /^pragma ([+-])([a-zA-Z0-9_-]+)\n$/
+
+        when IS_PRAGMA
           # Pragma directive
           action = $1 == '+' ? 'enable' : 'disable'
           pragma_key = $2
