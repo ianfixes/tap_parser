@@ -6,12 +6,12 @@
     {
       "description": "Input file opened",
       "number": 1,
-      "result": "pass"
+      "ok": true
     },
     {
       "description": "First line of the input valid",
       "number": 2,
-      "result": "fail",
+      "ok": false,
       "diagnostics": {
         "data": {
           "expect": "Fnible",
@@ -23,12 +23,12 @@
     {
       "description": "Read the rest of the file",
       "number": 3,
-      "result": "pass"
+      "ok": true
     },
     {
       "description": "Summarized correctly",
       "number": 4,
-      "result": "fail",
+      "ok": false,
       "diagnostics":{
         "message": "Can't make summary yet",
         "severity": "todo"

@@ -9,7 +9,7 @@
     {
       "number": 1,
       "description": "database handle",
-      "result": "fail"
+      "ok": false
     }
   ]
 }

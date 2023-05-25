@@ -6,42 +6,42 @@
     {
       "description": "created Board",
       "number": 1,
-      "result": "pass"
+      "ok": true
     },
     {
       "description": null,
       "number": 2,
-      "result": "pass"
+      "ok": true
     },
     {
       "description": null,
       "number": 3,
-      "result": "pass"
+      "ok": true
     },
     {
       "description": null,
       "number": 4,
-      "result": "pass"
+      "ok": true
     },
     {
       "description": null,
       "number": 5,
-      "result": "pass"
+      "ok": true
     },
     {
       "description": null,
       "number": 6,
-      "result": "pass"
+      "ok": true
     },
     {
       "description": null,
       "number": 7,
-      "result": "pass"
+      "ok": true
     },
     {
       "description": null,
       "number": 8,
-      "result": "pass",
+      "ok": true,
       "diagnostics": {
         "dump": {
           "board": [
@@ -63,7 +63,7 @@
     {
       "description": "board has 7 tiles + starter tile",
       "number": 9,
-      "result": "pass"
+      "ok": true
     }
   ]
 }

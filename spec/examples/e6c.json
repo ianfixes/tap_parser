@@ -3,18 +3,18 @@
     {
       "number": 1,
       "description": "in the parent",
-      "result": "pass"
+      "ok": true
     },
     {
       "number": 2,
       "description": "nested",
-      "result": "pass",
+      "ok": true,
       "children": {
         "tests": [
           {
             "number": 1,
             "description": "in the subtest",
-            "result": "pass"
+            "ok": true
           }
         ],
         "expected_tests": 1
@@ -23,7 +23,7 @@
     {
       "number": 3,
       "description": "empty",
-      "result": "pass",
+      "ok": true,
       "children": {
         "tests": [
 
@@ -34,13 +34,13 @@
     {
       "number": 4,
       "description": null,
-      "result": "pass",
+      "ok": true,
       "children": {
         "tests": [
           {
             "number": 1,
             "description": "name is optional",
-            "result": "pass"
+            "ok": true
           }
         ],
         "expected_tests": 1

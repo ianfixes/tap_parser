@@ -12,7 +12,7 @@
                       {
                         "number": 1,
                         "description": "clearly level 3",
-                        "result": "pass"
+                        "ok": true
                       }
                     ],
                     "expected_tests": 1

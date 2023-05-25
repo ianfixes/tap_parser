@@ -3,19 +3,19 @@
     {
       "number": 1,
       "description": "double nest passing",
-      "result": "pass",
+      "ok": true,
       "children": {
         "tests": [
           {
             "number": 1,
             "description": "nested parent",
-            "result": "pass",
+            "ok": true,
             "children": {
               "tests": [
                 {
                   "number": 1,
                   "description": "nested twice",
-                  "result": "pass"
+                  "ok": true
                 }
               ],
               "expected_tests": 1

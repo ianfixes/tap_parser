@@ -3,18 +3,18 @@
     {
       "number": 1,
       "description": "foo.tap",
-      "result": "pass",
+      "ok": true,
       "children": {
         "tests": [
           {
             "number": 1,
             "description": null,
-            "result": "pass"
+            "ok": true
           },
           {
             "number": 2,
             "description": "this passed",
-            "result": "pass"
+            "ok": true
           }
         ],
         "expected_tests": 2
@@ -23,18 +23,18 @@
     {
       "number": 2,
       "description": "bar.tap",
-      "result": "fail",
+      "ok": false,
       "children": {
         "tests": [
           {
             "number": 1,
             "description": "object should be a Bar",
-            "result": "pass"
+            "ok": true
           },
           {
             "number": 2,
             "description": "object.isBar should return true",
-            "result": "fail",
+            "ok": false,
             "diagnostics": {
               "found": false,
               "wanted": true,
@@ -48,7 +48,7 @@
           {
             "number": 3,
             "description": "object can bar bears",
-            "result": "pass",
+            "ok": true,
             "directives": {
               "TODO": null
             }

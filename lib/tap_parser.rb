@@ -155,7 +155,7 @@ module TAPParser
           test = {
             number: test_number,
             description: description,
-            result: (result_str == 'ok' ? :pass : :fail),
+            ok: (result_str == 'ok'),
           }
 
           # add children if parsed, and reset

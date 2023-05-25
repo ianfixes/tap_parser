@@ -5,14 +5,14 @@
     {
       "number": 1,
       "description": "subtest passing",
-      "result": "pass",
+      "ok": true,
       "children": {
         "expected_tests": 1,
         "tests": [
           {
             "number": 1,
             "description": "subtest test point",
-            "result": "pass"
+            "ok": true
           }
         ]
       }

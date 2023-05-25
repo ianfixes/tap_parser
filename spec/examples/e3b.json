@@ -5,17 +5,17 @@
     {
       "number": 2,
       "description": null,
-      "result": "pass"
+      "ok": true
     },
     {
       "number": 4,
       "description": null,
-      "result": "pass"
+      "ok": true
     },
     {
       "number": 1,
       "description": null,
-      "result": "pass"
+      "ok": true
     }
   ],
   "expected_tests": 3

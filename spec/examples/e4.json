@@ -5,7 +5,7 @@
     {
       "number": 1,
       "description": "hello",
-      "result": "pass",
+      "ok": true,
       "directives": {
         "TODO": null
       }
@@ -13,12 +13,12 @@
     {
       "number": 2,
       "description": "hello # TODO",
-      "result": "pass"
+      "ok": true
     },
     {
       "number": 3,
       "description": "hello",
-      "result": "pass",
+      "ok": true,
       "directives": {
         "TODO": "hash # character"
       }
@@ -26,7 +26,7 @@
     {
       "number": 4,
       "description": "hello",
-      "result": "pass",
+      "ok": true,
       "directives": {
         "TODO": "hash # character"
       }
@@ -34,12 +34,12 @@
     {
       "number": 7,
       "description": "hello",
-      "result": "pass"
+      "ok": true
     },
     {
       "number": 8,
       "description": "hello \\\\\\# TODO",
-      "result": "pass"
+      "ok": true
     }
   ],
   "expected_tests": 8

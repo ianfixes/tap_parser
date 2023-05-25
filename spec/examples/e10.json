@@ -6,17 +6,17 @@
     {
       "description": "Creating test program",
       "number": 1,
-      "result": "pass"
+      "ok": true
     },
     {
       "description": "Test program runs, no error",
       "number": 2,
-      "result": "pass"
+      "ok": true
     },
     {
       "description": "infinite loop",
       "number": 3,
-      "result": "fail",
+      "ok": false,
       "directives": {
         "TODO": "halting problem unsolved"
       }
@@ -24,7 +24,7 @@
     {
       "description": "infinite loop 2",
       "number": 4,
-      "result": "fail",
+      "ok": false,
       "directives": {
         "TODO": "halting problem unsolved"
       }
