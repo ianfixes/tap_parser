@@ -4,7 +4,7 @@ name: linux
 on: [push, pull_request]
 
 jobs:
-  "rubocop":
+  "code-quality":
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -13,12 +13,14 @@ jobs:
           ruby-version: 2.6
       - name: Check style
         run: |
-          g++ -v
           bundle install
           bundle exec rubocop --version
           bundle exec rubocop -D .
+      - name: Check documentation
+        run: |
+          bundle exec yard
 
-  "rspec-linux":
+  "unit-tests":
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -27,6 +29,5 @@ jobs:
           ruby-version: 2.6
       - name: Check functionality
         run: |
-          g++ -v
           bundle install
           bundle exec rspec
