@@ -7,11 +7,20 @@ module TAPParser
 
   IS_TAP_VERSION = /^TAP version (\d+)/
   IS_COMMENT =     /^\s*#/
-  IS_TAP_PLAN =    /^1\.\.(\d+)/
-  IS_TEST =        /^(\s*)((not )?ok)\s*(\d+)?\s*(-\s*)?(.*?)\s*(#.*?)?\n$/
-  IS_BAIL_OUT =    /^Bail out!(.*)\n$/
-  IS_DIRECTIVE =   /#\s+(SKIP|TODO)(\S*\s+([^\n]*))?/
-  IS_PRAGMA =      /^pragma ([+-])([a-zA-Z0-9_-]+)\n$/
+  IS_TAP_PLAN =    /^\s*1\.\.(\d+)/
+  IS_TEST =        /
+    ^                # start of line
+    (\s*)            # any indentation
+    ((not\ )?ok)     # result. note the escaping of the space!
+    (\s+(\d+))?      # optional test number
+    (\s+-(.*?))?     # optional test description
+    \s*?             # optional spacing
+    ([^\\]\#.*?)?    # optional directive, must start with space and hash
+    \s*$             # optional trailing whitespace
+  /x
+  IS_BAIL_OUT =    /^Bail out!(\s*)(.+?)?\s*$/
+  IS_DIRECTIVE =   /^[^\\]#\s+(SKIP|TODO)\s*(\S.*?)?\s*$/
+  IS_PRAGMA =      /^\s*pragma ([+-])([a-zA-Z0-9_-]+)\s*$/
 
   def self.is_yaml_begin(expected_indentation)
     yaml_indent = expected_indentation + (" " * 2)
@@ -30,7 +39,10 @@ module TAPParser
     @line_enumerator = lines.each
 
     def self.enum_next
-      @line_enumerator.next
+      # for lookahead purposes, we MUST consume all comments
+      ret = @line_enumerator.next
+      enum_take_while { |l| IS_COMMENT.match(l) }
+      ret.gsub("\\\\", "\\")
     rescue StopIteration
       nil
     end
@@ -80,8 +92,11 @@ module TAPParser
           actual_indentation = $1 || ''
           result_str = $2
           test_number = $4.nil? ? encountered_tests : $4.to_i
-          description = $6.strip
-          directive_str = $7
+          description = ($7.nil? || $7.strip.empty?) ? nil : $7.strip
+          directive_str = $8
+
+          # avoid doing gsub above because it screws up the $ variables
+          description = description.gsub("\\#", "#") unless description.nil?
 
           test = {
             number: test_number,
@@ -93,7 +108,9 @@ module TAPParser
           # find directives
           unless directive_str.nil?
             match = IS_DIRECTIVE.match(directive_str)
-            test[:directives] = { $1.to_sym => $3 } if match
+            k = $1  # could be nil if not SKIP or TODO, so don't .to_sym here
+            v = ($2.nil? || $2.strip.empty?) ? nil : $2.strip.gsub("\\#", "#")
+            test[:directives] = { k.to_sym => v } if match and !k.nil?
           end
 
           # find diagnostics
@@ -109,7 +126,7 @@ module TAPParser
 
         when IS_BAIL_OUT
           # Bail out directive
-          reason = ($1.nil? || $1.strip.empty?) ? nil : $1.strip
+          reason = ($2.nil? || $2.strip.empty?) ? nil : $2.strip
           directives ||= {}
           directives["bail out"] = reason
           break

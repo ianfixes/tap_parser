@@ -9,7 +9,7 @@
       "result": "pass"
     },
     {
-      "description": "",
+      "description": null,
       "number": 2,
       "result": "pass",
       "directives": {
@@ -17,7 +17,7 @@
       }
     },
     {
-      "description": "",
+      "description": null,
       "number": 3,
       "result": "pass",
       "directives": {
@@ -25,7 +25,7 @@
       }
     },
     {
-      "description": "",
+      "description": null,
       "number": 4,
       "result": "pass",
       "directives": {
@@ -33,7 +33,7 @@
       }
     },
     {
-      "description": "",
+      "description": null,
       "number": 5,
       "result": "pass",
       "directives": {

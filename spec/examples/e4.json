@@ -5,32 +5,31 @@
     {
       "number": 1,
       "description": "hello",
-      "result": "pass"
+      "result": "pass",
+      "directives": {
+        "TODO": null
+      }
     },
     {
       "number": 2,
-      "description": "hello \\",
+      "description": "hello # TODO",
       "result": "pass"
     },
     {
       "number": 3,
       "description": "hello",
-      "result": "pass"
+      "result": "pass",
+      "directives": {
+        "TODO": "hash # character"
+      }
     },
     {
       "number": 4,
       "description": "hello",
-      "result": "pass"
-    },
-    {
-      "number": 5,
-      "description": "hello \\\\",
-      "result": "pass"
-    },
-    {
-      "number": 6,
-      "description": "hello \\\\",
-      "result": "pass"
+      "result": "pass",
+      "directives": {
+        "TODO": "hash # character"
+      }
     },
     {
       "number": 7,
@@ -39,7 +38,7 @@
     },
     {
       "number": 8,
-      "description": "hello \\\\\\\\\\\\\\",
+      "description": "hello \\\\\\# TODO",
       "result": "pass"
     }
   ],

@@ -15,12 +15,13 @@ ok 3 - hello # TODO hash \# character
 # (assuming "character" isn't a known custom directive)
 ok 4 - hello # TODO hash # character
 
-# description: hello \
-# todo: true
-# todo reason: hash # character
-ok 5 - hello \\# TODO hash \# character
-# (assuming "character" isn't a known custom directive)
-ok 6 - hello \\# TODO hash # character
+# # NOTE FROM IANFIXES: this example conflicts with the directive that says a space exists before `# TODO`
+# # description: hello \
+# # todo: true
+# # todo reason: hash # character
+# ok 5 - hello \\# TODO hash \# character
+# # (assuming "character" isn't a known custom directive)
+# ok 6 - hello \\# TODO hash # character
 
 # description: hello # description # TODO
 # todo: false

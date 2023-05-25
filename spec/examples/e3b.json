@@ -4,17 +4,17 @@
   "tests": [
     {
       "number": 2,
-      "description": "",
+      "description": null,
       "result": "pass"
     },
     {
       "number": 4,
-      "description": "",
+      "description": null,
       "result": "pass"
     },
     {
       "number": 1,
-      "description": "",
+      "description": null,
       "result": "pass"
     }
   ],
