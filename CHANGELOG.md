@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - Skeleton for gem with working unit tests
+- Implementation and tests based on https://testanything.org/tap-version-14-specification.html
 
 ### Changed
 
