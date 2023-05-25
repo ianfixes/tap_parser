@@ -2,7 +2,17 @@ require 'yaml'
 require "tap_parser/version"
 
 # TapParser contains a module for parsing and serializing text that follows the Test Anything Protocol
+#
 # @author Ian Katz <ianfixes@gmail.com>
+#
+# @example Usage example
+#    require "TAPParser"
+#    require "pathname"
+#    require "json"
+#
+#    result_file = Pathname.new("/path/to/myfile.tap")
+#    result = TAPParser.parse(result_file.basename, File.read(result_file).each_line)
+#    puts JSON.pretty_generate(result, indent: "  ")
 module TAPParser
   TAP_TAB_WIDTH         = 4
   TAP_YAML_INDENT_WIDTH = 2
@@ -36,6 +46,10 @@ module TAPParser
     /^#{yaml_indent}---(\s*)$/
   end
 
+  # detect whether this is the start of a YAML block at the end of YAML indentation
+  #
+  # @param expected_indentation [String] the expected indentation in spaces
+  # @return [bool]
   def self.yaml_end(expected_indentation)
     yaml_indent = expected_indentation + (" " * TAP_YAML_INDENT_WIDTH)
     /^#{yaml_indent}\.\.\.\s*$/
@@ -54,6 +68,8 @@ module TAPParser
     @line_enumerator = lines.each
 
     # Take the next line of the input, and unescape slashes
+    #
+    # @return [String] The next line of input, advancing the internal enumerator
     def self.enum_next
       @line_enumerator.next.gsub("\\\\", "\\") # unescape as we go
     rescue StopIteration
@@ -61,6 +77,8 @@ module TAPParser
     end
 
     # peek at the next line of input
+    #
+    # @return [String] The next line of input, without advancing the internal enumerator
     def self.enum_peek
       @line_enumerator.peek
     rescue StopIteration
@@ -68,6 +86,11 @@ module TAPParser
     end
 
     # take all matching contiguous lines of input
+    #
+    # @yield [str] This block is invoked with a string argument
+    # @yieldparam str [String] a string of input
+    # @yieldreturn [bool] Whether the input should be sent to the consumer
+    # @return [Enumerator] An enumerator that wraps the input
     def self.enum_take_while(&block)
       Enumerator.new do |yielder|
         loop do
@@ -82,6 +105,9 @@ module TAPParser
     end
 
     # figure out the indentation level of lines in terms of number of tabs
+    #
+    # @param line [String] the input line
+    # @return [int] the number of conceptual "tabs" (via multiple spaces) at the begnning of the line
     def self.indentation_of(line)
       return nil if line.nil?
 
