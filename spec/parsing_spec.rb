@@ -129,7 +129,6 @@ RSpec.describe "TapParser" do
   end
 
   context "parsing" do
-    #next
     (Pathname.new(__dir__) + "examples").each_child.select(&:file?).select { |f| f.extname == ".tap" }.sort.each do |child|
 
       context("#{child.basename}") do
@@ -172,7 +171,9 @@ RSpec.describe "TapParser" do
           it "parses as expected" do
             expect(@actual).to eq(expected)
           rescue RSpec::Expectations::ExpectationNotMetError => e
-            puts JSON.pretty_generate(@actual, indent: "  ")
+            unless ENV['HELP_WITH_JSON'].nil?
+              puts JSON.pretty_generate(@actual, indent: "  ")
+            end
             raise
           end
 

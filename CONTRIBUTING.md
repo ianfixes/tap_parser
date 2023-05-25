@@ -9,13 +9,29 @@ TapParser uses a very standard GitHub workflow.
     * If you are submitting code, use `master` as the base branch
     * If you are submitting broken unit tests (illustrating a bug that should be fixed), use `tdd` as the base branch.
 
+## Passing Tests
+
 Pull requests will trigger a CI job.  The following two commands will be expected to pass (so you may want to run them locally before opening the pull request):
 
 * `bundle exec rubocop -D .` - code style tests
 * `bundle exec rspec` - functional tests
 * `bundle exec rspec spec/some_file_spec.rb` - functional tests for just some file
 
- If you do not already have a working ruby development environment set up, run the following commands:
+### Generating unit test examples
+
+Unit tests are designed to scrape `*.tap` files from `spec/examples/` and match their parsed output to corresponding `*.json` files with the same basename -- e.g. the expected values from parsing `e1.tap` are in `e1.json`.
+
+Writing JSON files from scratch would be tedious, so the environment variable `HELP_WITH_JSON` can be set to cause `rspec` to print out the JSON it parsed if/when a test fails.  This can be a convenient starting place for creating the JSON files.
+
+```shell
+export HELP_WITH_JSON=1
+bundle exec rspec
+```
+
+
+## Environment Setup
+
+If you do not already have a working ruby development environment set up, run the following commands:
 
 ```shell
 # One of the following
