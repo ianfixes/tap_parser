@@ -74,12 +74,19 @@ Metrics/AbcSize:
 Metrics/MethodLength:
   Enabled: false
 
+Metrics/ModuleLength:
+  Enabled: false
+
 Metrics/BlockLength:
   Enabled: false
 
 # Configuration parameters: CountKeywordArgs.
 Metrics/ParameterLists:
   Max: 7
+
+# pretty much a core dependency of the parser architecture
+Style/PerlBackrefs:
+  Enabled: false
 
 Style/BlockComments:
   Enabled: false
@@ -95,17 +102,14 @@ Style/YodaCondition:
 Style/FormatString:
   Enabled: false
 
-# Offense count: 1
 Metrics/CyclomaticComplexity:
   Enabled: false
   Max: 11
 
-# Offense count: 1
 Metrics/PerceivedComplexity:
   Enabled: false
   Max: 14
 
-# Cop supports --auto-correct.
 Style/RedundantSelf:
   Enabled: false
 
@@ -125,4 +129,8 @@ Style/SymbolArray:
 # because if the robot can comment better than me then
 # it might as well learn to write the code for me
 Style/CommentAnnotation:
+  Enabled: false
+
+# Switching to lambdas broke the code, and fixing that would have killed readability
+Lint/NestedMethodDefinition:
   Enabled: false
