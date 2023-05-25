@@ -5,7 +5,7 @@ require "tap_parser/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "tap_parser"
-  spec.version       = TapParser::VERSION
+  spec.version       = TAPParser::VERSION
   spec.licenses      = ['Apache-2.0']
   spec.authors       = ["Ian Katz"]
   spec.email         = ["ianfixes@gmail.com"]

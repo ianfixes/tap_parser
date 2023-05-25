@@ -7,7 +7,7 @@ def str_key(hash)
   JSON.parse(hash.to_json)
 end
 
-RSpec.describe "TapParser" do
+RSpec.describe "TAPParser" do
 
   context "regexes" do
 
