@@ -5,10 +5,19 @@
 
 `tap_parser` is a Ruby gem that parses the [Test Anything Protocol](https://testanything.org/).
 
+## Quick start
 
-## Known Problems
+First `gem install tap_parser`. Then:
 
-* I haven't written it yet
+```ruby
+require "TAPParser"
+require "pathname"
+require "json"
+
+result_file = Pathname.new("/path/to/myfile.tap")
+result = TAPParser.parse(result_file.basename, File.read(result_file).each_line)
+puts JSON.pretty_generate(result, indent: "  ")
+```
 
 
 ## Author
