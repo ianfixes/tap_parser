@@ -1,0 +1,19 @@
+TAP version 14
+
+ok 1 - in the parent
+
+# Subtest: nested
+    1..1
+    ok 1 - in the subtest
+ok 2 - nested
+
+# Subtest: empty
+    1..0
+ok 3 - empty
+
+# Subtest
+    ok 1 - name is optional
+    1..1
+ok 4
+
+1..4

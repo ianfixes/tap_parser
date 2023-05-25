@@ -1,0 +1,68 @@
+{
+  "tests": [
+    {
+      "number": 1,
+      "description": "foo.tap",
+      "result": "pass",
+      "children": {
+        "tests": [
+          {
+            "number": 1,
+            "description": null,
+            "result": "pass"
+          },
+          {
+            "number": 2,
+            "description": "this passed",
+            "result": "pass"
+          }
+        ],
+        "expected_tests": 2
+      }
+    },
+    {
+      "number": 2,
+      "description": "bar.tap",
+      "result": "fail",
+      "children": {
+        "tests": [
+          {
+            "number": 1,
+            "description": "object should be a Bar",
+            "result": "pass"
+          },
+          {
+            "number": 2,
+            "description": "object.isBar should return true",
+            "result": "fail",
+            "diagnostics": {
+              "found": false,
+              "wanted": true,
+              "at": {
+                "file": "test/bar.ts",
+                "line": 43,
+                "column": 8
+              }
+            }
+          },
+          {
+            "number": 3,
+            "description": "object can bar bears",
+            "result": "pass",
+            "directives": {
+              "TODO": null
+            }
+          }
+        ],
+        "expected_tests": 3
+      },
+      "diagnostics": {
+        "fail": 1,
+        "todo": 1
+      }
+    }
+  ],
+  "expected_tests": 2,
+  "description": "e5.tap",
+  "tap_version": 14
+}

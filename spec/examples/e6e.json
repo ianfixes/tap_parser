@@ -1,0 +1,33 @@
+{
+  "tests": [
+    {
+      "children": {
+        "tests": [
+          {
+            "children": {
+              "tests": [
+                {
+                  "children": {
+                    "tests": [
+                      {
+                        "number": 1,
+                        "description": "clearly level 3",
+                        "result": "pass"
+                      }
+                    ],
+                    "expected_tests": 1
+                  }
+                }
+              ],
+              "expected_tests": null
+            }
+          }
+        ],
+        "expected_tests": null
+      }
+    }
+  ],
+  "expected_tests": null,
+  "description": "e6e.tap",
+  "tap_version": 14
+}

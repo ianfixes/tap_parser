@@ -129,17 +129,8 @@ RSpec.describe "TapParser" do
   end
 
   context "parsing" do
+    #next
     (Pathname.new(__dir__) + "examples").each_child.select(&:file?).select { |f| f.extname == ".tap" }.sort.each do |child|
-      next if [
-        "arduino_ci.tap",
-        "e5.tap",
-        "e6a.tap",
-        "e6b.tap",
-        "e6c.tap",
-        "e6d.tap",
-        "e6e.tap",
-        "simple.tap",
-      ].include?(child.basename.to_s)
 
       context("#{child.basename}") do
         corresponding_path = child.parent + "#{child.basename('.*')}.json"

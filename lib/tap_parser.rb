@@ -4,11 +4,16 @@ require "tap_parser/version"
 # TapParser contains a module for parsing and serializing text that follows the Test Anything Protocol
 # @author Ian Katz <ianfixes@gmail.com>
 module TAPParser
+  TAP_TAB_WIDTH         = 4
+  TAP_YAML_INDENT_WIDTH = 2
 
+  # regexes we will use, with capture groups we will also use
   IS_TAP_VERSION = /^TAP version (\d+)/
-  IS_COMMENT =     /^\s*#/
-  IS_TAP_PLAN =    /^\s*1\.\.(\d+)/
-  IS_TEST =        /
+  IS_COMMENT     = /^\s*#/
+  IS_BLANK       = /^\s*$/
+  IS_CONTENT     = /^(\s*)\S/
+  IS_TAP_PLAN    = /^\s*1\.\.(\d+)/
+  IS_TEST        = /
     ^                # start of line
     (\s*)            # any indentation
     ((not\ )?ok)     # result. note the escaping of the space!
@@ -18,41 +23,51 @@ module TAPParser
     ([^\\]\#.*?)?    # optional directive, must start with space and hash
     \s*$             # optional trailing whitespace
   /x
-  IS_BAIL_OUT =    /^Bail out!(\s*)(.+?)?\s*$/
-  IS_DIRECTIVE =   /^[^\\]#\s+(SKIP|TODO)\s*(\S.*?)?\s*$/
-  IS_PRAGMA =      /^\s*pragma ([+-])([a-zA-Z0-9_-]+)\s*$/
+  IS_BAIL_OUT    = /^Bail out!(\s*)(.+?)?\s*$/
+  IS_DIRECTIVE   = /^[^\\]#\s+(SKIP|TODO)\s*(\S.*?)?\s*$/
+  IS_PRAGMA      = /^\s*pragma ([+-])([a-zA-Z0-9_-]+)\s*$/
 
+  # detect whether this is the start of a YAML block at the beginning of YAML indentation
+  #
+  # @param expected_indentation [String] the expected indentation in spaces
+  # @return [bool]
   def self.is_yaml_begin(expected_indentation)
-    yaml_indent = expected_indentation + (" " * 2)
+    yaml_indent = expected_indentation + (" " * TAP_YAML_INDENT_WIDTH)
     /^#{yaml_indent}---(\s*)$/
   end
 
   def self.is_yaml_end(expected_indentation)
-    yaml_indent = expected_indentation + (" " * 2)
+    yaml_indent = expected_indentation + (" " * TAP_YAML_INDENT_WIDTH)
     /^#{yaml_indent}\.\.\.\s*$/
   end
 
+  # Parse a TAP file into a hash of its contents
+  #
+  # @param source_description [String] the name of the input
+  # @param lines [Enumerator] A source of lines as strings
+  # @return [Hash] the structured content representing the input
   def self.parse(source_description, lines)
     pragmas = {}
 
-    # some nonsense because the internal pointer of my iterator keeps resetting to zero!
+    # Workaround: the internal pointer of my enumerator keeps resetting to zero!
+    # If you want something done right, do it yourself I guess :(
     @line_enumerator = lines.each
 
+    # Take the next line of the input, and unescape slashes
     def self.enum_next
-      # for lookahead purposes, we MUST consume all comments
-      ret = @line_enumerator.next
-      enum_take_while { |l| IS_COMMENT.match(l) }
-      ret.gsub("\\\\", "\\")
+      @line_enumerator.next.gsub("\\\\", "\\") # unescape as we go
     rescue StopIteration
       nil
     end
 
+    # peek at the next line of input
     def self.enum_peek
       @line_enumerator.peek
     rescue StopIteration
       nil
     end
 
+    # take all matching contiguous lines of input
     def self.enum_take_while(&block)
       Enumerator.new do |yielder|
         loop do
@@ -65,31 +80,70 @@ module TAPParser
       end
     end
 
-    def self.parse_tests(parent_description, current_indentation, limit)
-      return {} if limit < 0
-      expected_indentation = " " * current_indentation * 4
+    # figure out the indentation level of lines in terms of number of tabs
+    def self.indentation_of(line)
+      return nil if line.nil?
+
+      match = IS_CONTENT.match(line)
+      return ($1.length / TAP_TAB_WIDTH).to_i if match
+      0
+    end
+
+    # recursive entry point: parse a TAP file into a hash of its contents
+    #
+    # @param parent_description [String] the name of the input
+    # @param current_indentation [Int] the number of tabs the input is expected to have
+    # @return [Hash] the structured content of the file
+    def self.parse_tests(parent_description, current_indentation)
+      #return {} if limit < 0
+      expected_indentation = " " * current_indentation * TAP_TAB_WIDTH
       protocol_version = nil
       directives = nil
       expected_tests = nil
       encountered_tests = 0
       tests = []
+      children = nil
+
 
       loop do
+        # decide whether to recurse
+        this_line = enum_peek
+        unless this_line.nil?
+          if indentation_of(this_line) > current_indentation
+            children = parse_tests(nil, current_indentation + 1)
+          end
+        end
+
+        # consume input from wherever we left off
         line = enum_next
-        break if line.nil?
         next_line = enum_peek
 
+        # special case exit when subtests aren't "owned"
+        if line.nil?
+          tests << { children: children } unless children.nil?
+          break
+        end
+
+
+        # process the input
         case line
         when IS_TAP_VERSION
           protocol_version = $1.to_i
         when IS_COMMENT
           # comment, ignore
         when IS_TAP_PLAN
-          # TAP plan line
           expected_tests = $1.to_i
+        when IS_BAIL_OUT
+          reason = ($2.nil? || $2.strip.empty?) ? nil : $2.strip
+          directives ||= {}
+          directives["bail out"] = reason
+          break
+        when IS_PRAGMA
+          action = $1 == '+' ? 'enable' : 'disable'
+          pragma_key = $2
+          pragmas[pragma_key] = action
         when IS_TEST
           encountered_tests += 1
-          actual_indentation = $1 || ''
           result_str = $2
           test_number = $4.nil? ? encountered_tests : $4.to_i
           description = ($7.nil? || $7.strip.empty?) ? nil : $7.strip
@@ -102,10 +156,13 @@ module TAPParser
             number: test_number,
             description: description,
             result: (result_str == 'ok' ? :pass : :fail),
-            # subtests: parse_tests(description, lines, indentation, limit - 1),
           }
 
-          # find directives
+          # add children if parsed, and reset
+          test[:children] = children unless children.nil?
+          children = nil
+
+          # find directives and add
           unless directive_str.nil?
             match = IS_DIRECTIVE.match(directive_str)
             k = $1  # could be nil if not SKIP or TODO, so don't .to_sym here
@@ -113,7 +170,7 @@ module TAPParser
             test[:directives] = { k.to_sym => v } if match and !k.nil?
           end
 
-          # find diagnostics
+          # find diagnostics and add
           yaml_indent = expected_indentation + (" " * 2)
           if is_yaml_begin(expected_indentation).match(next_line)
             raw_yaml = enum_take_while { |l| !is_yaml_end(expected_indentation).match(l) }
@@ -122,32 +179,29 @@ module TAPParser
             enum_next # strip off "..."
           end
 
+          # record the test
           tests << test
+        end
 
-        when IS_BAIL_OUT
-          # Bail out directive
-          reason = ($2.nil? || $2.strip.empty?) ? nil : $2.strip
-          directives ||= {}
-          directives["bail out"] = reason
+        # handle the end of recursion if the next line is de-indented.
+        # according to the spec, we can only go up one level at a time
+        next_line_indentation = indentation_of(next_line)
+        if next_line.nil? || next_line_indentation < current_indentation
           break
-
-        when IS_PRAGMA
-          # Pragma directive
-          action = $1 == '+' ? 'enable' : 'disable'
-          pragma_key = $2
-          pragmas[pragma_key] = action
         end
       end
 
+      # summarize the entire operation
       ret = {
-        tap_version: protocol_version,
-        description: parent_description,
         tests: tests,
         expected_tests: expected_tests
       }
-      ret[:directives] = directives unless directives.nil?
+      ret[:description] = parent_description unless parent_description.nil?
+      ret[:tap_version] = protocol_version if current_indentation.zero?
+      ret[:directives]  = directives unless directives.nil?
       ret
     end
-    parse_tests(source_description, 0, 2)
+
+    parse_tests(source_description, 0)
   end
 end

@@ -1,0 +1,53 @@
+{
+  "tests": [
+    {
+      "number": 1,
+      "description": "in the parent",
+      "result": "pass"
+    },
+    {
+      "number": 2,
+      "description": "nested",
+      "result": "pass",
+      "children": {
+        "tests": [
+          {
+            "number": 1,
+            "description": "in the subtest",
+            "result": "pass"
+          }
+        ],
+        "expected_tests": 1
+      }
+    },
+    {
+      "number": 3,
+      "description": "empty",
+      "result": "pass",
+      "children": {
+        "tests": [
+
+        ],
+        "expected_tests": 0
+      }
+    },
+    {
+      "number": 4,
+      "description": null,
+      "result": "pass",
+      "children": {
+        "tests": [
+          {
+            "number": 1,
+            "description": "name is optional",
+            "result": "pass"
+          }
+        ],
+        "expected_tests": 1
+      }
+    }
+  ],
+  "expected_tests": 4,
+  "description": "e6c.tap",
+  "tap_version": 14
+}

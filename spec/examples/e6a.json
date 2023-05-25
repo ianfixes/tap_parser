@@ -1,0 +1,22 @@
+{
+  "tap_version": 14,
+  "description": "e6a.tap",
+  "tests": [
+    {
+      "number": 1,
+      "description": "subtest passing",
+      "result": "pass",
+      "children": {
+        "expected_tests": 1,
+        "tests": [
+          {
+            "number": 1,
+            "description": "subtest test point",
+            "result": "pass"
+          }
+        ]
+      }
+    }
+  ],
+  "expected_tests": 1
+}

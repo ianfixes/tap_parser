@@ -1,0 +1,32 @@
+{
+  "tests": [
+    {
+      "number": 1,
+      "description": "double nest passing",
+      "result": "pass",
+      "children": {
+        "tests": [
+          {
+            "number": 1,
+            "description": "nested parent",
+            "result": "pass",
+            "children": {
+              "tests": [
+                {
+                  "number": 1,
+                  "description": "nested twice",
+                  "result": "pass"
+                }
+              ],
+              "expected_tests": 1
+            }
+          }
+        ],
+        "expected_tests": 1
+      }
+    }
+  ],
+  "expected_tests": 1,
+  "description": "e6b.tap",
+  "tap_version": 14
+}
